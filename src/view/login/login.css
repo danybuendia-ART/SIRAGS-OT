@@ -1,0 +1,24 @@
+.card {
+    width: 400px;
+}
+.fondo{
+    background-color: rgb(209, 224, 235);
+}
+.circle{
+    background-color: rgb(5, 108, 199);
+    border-radius: 50%;
+    max-width: 60px;
+    padding: 15px;
+    margin: 0 auto;
+    color: white;
+    font-size: 15px;
+}
+.create-acount{
+    background-color: rgb(224, 240, 255);
+}
+.hidden{
+    display: none;
+}
+.show{
+    display: block;
+}
