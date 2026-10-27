@@ -179,7 +179,7 @@ export default function Calendario({ events, onMonthChange }: CalendarProps) {
         </div>
       </div>
 
-      <aside className="calendar-activities card shadow-sm" aria-live="polite">
+      <aside className="calendar-activities card shadow-sm w-100" aria-live="polite">
         <div className="card-body">
           <p className="calendar-sidebar-label mb-1">Agenda del día</p>
           <h2 className="calendar-sidebar-date">
