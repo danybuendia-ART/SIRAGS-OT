@@ -1,6 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/logosir.png"
-import { LogIn, Ticket, MoveLeft } from "lucide-react";//logo de inicio de sesion
 
 import { getCurrentUser } from "../../utils/auth";
 
@@ -41,10 +40,12 @@ export default function Header() {
 
                 {/* Botón móvil */}
                 <button
-                    className="navbar-toggler"
+                    className="navbar-toggler d-lg-none"
                     type="button"
                     data-bs-toggle="offcanvas"
                     data-bs-target="#mobileMenu"
+                    aria-controls="mobileMenu"
+                    aria-label="Abrir menú"
                 >
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -97,6 +98,29 @@ export default function Header() {
                         ))*/}
 
                     </ul>
+                </div>
+
+                <div className="offcanvas offcanvas-end d-lg-none" tabIndex={-1} id="mobileMenu" aria-labelledby="mobileMenuLabel">
+                    <div className="offcanvas-header">
+                        <h5 className="offcanvas-title" id="mobileMenuLabel">Menú</h5>
+                        <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+                    </div>
+                    <div className="offcanvas-body">
+                        <div className="d-grid gap-2">
+                            <button className="btn btn-light" data-bs-dismiss="offcanvas" onClick={() => navigate("/home")}>
+                                Actividades
+                            </button>
+                            <button className="btn btn-light" data-bs-dismiss="offcanvas" onClick={() => navigate("/porcentaje-actividades")}>
+                                Porcentaje Actividades
+                            </button>
+                            <button className="btn btn-light" data-bs-dismiss="offcanvas" onClick={() => navigate("/proyectos")}>
+                                Proyectos
+                            </button>
+                            <button className="btn btn-light" data-bs-dismiss="offcanvas" onClick={() => navigate("/avance-porcentual")}>
+                                Avance Porcentual
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>

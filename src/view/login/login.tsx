@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { LogIn, Ticket, MoveLeft } from "lucide-react";//logo de inicio de sesion
 import "./login.css"
-import { apiRequest, decryptData } from "../../utils/api";
-import { alertInfo, alertSuccess, alertError, alertDefault, alertWarning } from "../../utils/alerts";
+import { apiRequest } from "../../utils/api";
+import { alertSuccess, alertError, alertWarning } from "../../utils/alerts";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginView() {
@@ -36,7 +36,6 @@ export default function LoginView() {
       pass
     }
     const response = await apiRequest("usuarios", info, "POST");
-    console.log(response)
     if (response.warn) {
       alertError(response.warn)
       return;
@@ -64,7 +63,7 @@ export default function LoginView() {
       correo: addMail,
       pass: addPass
     }
-    const response = decryptData(await apiRequest("usuarios", info, "POST"));
+    const response = await apiRequest("usuarios", info, "POST");
     if (response.warn) {
 
       return alertWarning(response.warn);
@@ -77,7 +76,7 @@ export default function LoginView() {
   const sendTicket = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const response = decryptData(await apiRequest("tickets", {action: "create", nombre: addSolicitante, descripcion: addComment}, "POST"))
+    const response = await apiRequest("tickets", {action: "create", nombre: addSolicitante, descripcion: addComment}, "POST")
 
     if(response.message){
       alertSuccess(response.message)
