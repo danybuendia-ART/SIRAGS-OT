@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import {
     CalendarDays,
     CheckCircle2,
@@ -9,130 +9,141 @@ import {
     Search,
 } from "lucide-react";
 import "./proyectos.css";
+import Target from "../../components/target/target";
+import { apiRequest, decryptData } from "../../utils/api";
 
 export default function Proyects() {
+    const [proyectosGral, setProyectos] = useState<any[]>([]);
+
+
+    let priority = [];
+    let Proyectos = []
     const [nombreProyecto, setNombreProyecto] = useState("");
     const [descripcionProyecto, setDescripcion] = useState("");
+    const [proyectoSeleccionado, setProyectoSeleccionado] = useState(null);
+
+    useEffect(() => {
+        getProyects()
+    }, [])
+
+    const getProyects = async () => {
+        const response = decryptData(await apiRequest("proyectos", null, "GET"));
+        setProyectos(response);
+
+    }
 
     const addProject = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        
     };
+
+    priority = proyectosGral.filter((p: any) => p.priority);// se dividen los proyectos si son prioritarios o no
+    Proyectos = proyectosGral.filter((p: any) => !p.priority);// se dividen los proyectos si son prioritarios o no
+
 
     return (
         <main className="projects-page">
-            <div className="projects-container">
-                <header className="projects-hero">
-                    <div className="projects-hero-copy">
-                        <div className="projects-eyebrow">
-                            <FolderOpen size={16} aria-hidden="true" />
-                            Gestión de proyectos
-                        </div>
-                        <p>Organiza la programación y da seguimiento a cada iniciativa.</p>
+            <header className="projects-hero">
+                <div className="projects-hero-copy">
+                    <div className="projects-eyebrow">
+                        <FolderOpen size={16} aria-hidden="true" />
+                        Gestión de proyectos
                     </div>
-                    <button
-                        className="projects-primary-button"
-                        type="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#exampleModal"
-                    >
-                        <Plus size={19} aria-hidden="true" />
-                        Programar proyecto
+                    <p>Organiza la programación y da seguimiento a cada iniciativa.</p>
+                </div>
+
+                <div className="projects-filters">
+                    <div className="projects-date-field">
+                        <label>Fecha de inicio</label>
+                        <input type="date" className="form-control" />
+                    </div>
+                    <div className="projects-date-field">
+                        <label>Fecha de cierre</label>
+                        <input type="date" className="form-control" />
+                    </div>
+                    <button className="projects-filter-button btn" type="button">
+                        <Search size={17} aria-hidden="true" />
+                        Buscar
                     </button>
-                </header>
 
-                <section className="projects-summary" aria-label="Resumen de proyectos">
-                    <article className="projects-stat-card">
-                        <div className="projects-stat-icon projects-stat-icon-blue">
-                            <CalendarDays size={20} aria-hidden="true" />
-                        </div>
-                        <div>
-                            <p>Actividades programadas</p>
-                            <strong>—</strong>
-                            <span>Resumen general</span>
-                        </div>
-                    </article>
-                    <article className="projects-stat-card">
-                        <div className="projects-stat-icon projects-stat-icon-amber">
-                            <Flame size={20} aria-hidden="true" />
-                        </div>
-                        <div>
-                            <p>Actividades prioritarias</p>
-                            <strong>—</strong>
-                            <span>Requieren atención</span>
-                        </div>
-                    </article>
-                    <article className="projects-stat-card">
-                        <div className="projects-stat-icon projects-stat-icon-green">
-                            <CheckCircle2 size={20} aria-hidden="true" />
-                        </div>
-                        <div>
-                            <p>Proyectos registrados</p>
-                            <strong>—</strong>
-                            <span>En seguimiento</span>
-                        </div>
-                    </article>
-                </section>
+                </div>
+                <button
+                    className="projects-primary-button"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"
+                >
+                    <Plus size={19} aria-hidden="true" />
+                    Programar proyecto
+                </button>
+            </header>
 
-                <section className="projects-panel" aria-labelledby="projects-tracking-title">
-                    <div className="projects-panel-heading">
-                        <div>
-                            <span className="projects-section-label">Panel de control</span>
-                            <h2 id="projects-tracking-title">Seguimiento de proyectos</h2>
-                            <p>Consulta la programación dentro de un periodo.</p>
-                        </div>
-                        <span className="projects-status">
-                            <span aria-hidden="true" />
-                            Vista general
-                        </span>
+            <section className="projects-summary" aria-label="Resumen de proyectos">
+                <article className="projects-stat-card">
+                    <div className="projects-stat-icon projects-stat-icon-blue">
+                        <CalendarDays size={20} aria-hidden="true" />
                     </div>
-
-                    <div className="projects-filters">
-                        <div className="projects-date-field">
-                            <label htmlFor="project-start-date">Fecha de inicio</label>
-                            <input id="project-start-date" type="date" className="form-control" />
-                        </div>
-                        <div className="projects-date-field">
-                            <label htmlFor="project-end-date">Fecha de cierre</label>
-                            <input id="project-end-date" type="date" className="form-control" />
-                        </div>
-                        <button className="projects-filter-button" type="button">
-                            <Search size={17} aria-hidden="true" />
-                            Buscar
-                        </button>
-                        <button className="projects-schedule-button" type="button">
-                            <Clock3 size={17} aria-hidden="true" />
-                            Ver programación
-                        </button>
+                    <div>
+                        <p>Actividades programadas</p>
+                        <strong>---</strong>
+                        <span>Resumen general</span>
                     </div>
-                </section>
-
-                <section className="projects-list-panel" aria-labelledby="projects-list-title">
-                    <div className="projects-list-heading">
-                        <div>
-                            <h2 id="projects-list-title">Proyectos recientes</h2>
-                            <p>Un vistazo rápido a las iniciativas del equipo.</p>
-                        </div>
-                        <span className="projects-list-tag">Todos los proyectos</span>
+                </article>
+                <article className="projects-stat-card">
+                    <div className="projects-stat-icon projects-stat-icon-amber">
+                        <Flame size={20} aria-hidden="true" />
                     </div>
+                    <div>
+                        <p>Actividades prioritarias</p>
+                        <strong>{priority.length}</strong>
+                        <span>Requieren atención</span>
+                    </div>
+                </article>
+                <article className="projects-stat-card">
+                    <div className="projects-stat-icon projects-stat-icon-green">
+                        <CheckCircle2 size={20} aria-hidden="true" />
+                    </div>
+                    <div>
+                        <p>Proyectos registrados</p>
+                        <strong>{Proyectos.length}</strong>
+                        <span>En seguimiento</span>
+                    </div>
+                </article>
+            </section>
+
+            <section className="projects-list-panel" aria-labelledby="projects-list-title">
+                <div className="projects-list-heading">
+                    <div>
+                        <h2 id="projects-list-title"><Flame style={{ color: "orange" }} /> Proyectos Prioritarios</h2>
+                        <p></p>
+                    </div>
+                    <span className="projects-list-tag">Todos los proyectos</span>
+                </div>
+
+                {priority.length > 0 ? (
+                    <Target proyectos={priority} seleccionarProyecto={proyectoSeleccionado} />
+                ) : (
                     <div className="projects-empty-state">
-                        <div className="projects-empty-icon">
-                            <FolderOpen size={25} aria-hidden="true" />
-                        </div>
-                        <h3>Tu espacio de proyectos está listo</h3>
-                        <p>Cuando haya proyectos disponibles, podrás consultarlos y darles seguimiento aquí.</p>
-                        <button
-                            className="projects-empty-action"
-                            type="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"
-                        >
-                            <Plus size={17} aria-hidden="true" />
-                            Crear primer proyecto
-                        </button>
+                        {/* Estado vacío */}
                     </div>
-                </section>
-            </div>
+                )}
+            </section>
+            <section className="projects-list-panel mt-4" aria-labelledby="projects-list-title">
+                <div className="projects-list-heading">
+                    <div>
+
+                        <h2 id="projects-list-title"><FolderOpen /> Proyectos </h2>
+                        <p>Proyectos registrados recientemente.</p>
+                    </div>
+                    <span className="projects-list-tag">Todos los proyectos</span>
+                </div>
+                {priority.length > 0 ? (
+                    <Target proyectos={Proyectos} seleccionarProyecto={proyectoSeleccionado} />
+                ) : (
+                    <div className="projects-empty-state">
+                        {/* Estado vacío */}
+                    </div>
+                )}
+            </section>
 
             <div
                 className="modal fade projects-modal"
@@ -215,6 +226,6 @@ export default function Proyects() {
                     </div>
                 </div>
             </div>
-        </main>
+        </main >
     );
 }
